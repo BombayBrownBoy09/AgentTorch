@@ -95,6 +95,9 @@ class LangchainLLM(LLM):
     ):
         super().__init__()
         self.backend = "langchain"
+        self.agent_profile = agent_profile
+        self.model = model
+        self.openai_api_key = openai_api_key
         self.llm = ChatOpenAI(
             model=self.model, openai_api_key=self.openai_api_key, temperature=1
         )

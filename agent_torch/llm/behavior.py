@@ -1,7 +1,7 @@
 from agent_torch.llm.archetype import Archetype
 from agent_torch.llm.llm import DspyLLM
 from agent_torch.llm.prompt_manager import PromptManager
-from agent_torch.utils import LoadPopulation
+from agent_torch.dataloader import LoadPopulation
 import torch
 
 
@@ -25,6 +25,7 @@ class Behavior:
             self.prompt_manager.dict_variables_with_values
         )
 
+        agent_output = []
         for num_retries in range(10):
             try:
                 # last_k : Number of previous conversations to add in history
