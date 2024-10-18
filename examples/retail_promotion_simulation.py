@@ -2,6 +2,7 @@
 from agent_torch.simulations.retail_simulation import run_retail_simulation
 from agent_torch.agents.retail_customer_agent import RetailCustomerAgent, generate_preferences, generate_budget
 import matplotlib.pyplot as plt
+import random
 
 # Define a simple Product class
 class Product:
@@ -39,6 +40,9 @@ agents = [
     for i in range(100)
 ]
 
+for agent in agents:
+    agent.reorders = random.randint(0, 5) 
+    
 # Step 3: Run Simulation Without Promotion
 sales_without_promo = run_retail_simulation(num_agents=100, num_steps=10, products=products, promotions=[])
 
