@@ -71,19 +71,24 @@ for product_id in sales_with_promo.keys():
 if all(v == 0 for v in sales_before.values()) and all(v == 0 for v in sales_after.values()):
     print("No sales data to plot. Please check agent behavior or product promotions.")
 else:
-    # Plot sales comparison
+# Plot sales comparison
     plt.figure(figsize=(10, 6))
     labels = ['Frozen', 'Produce', 'Bakery']
-    x = range(len(categories))
+    x = range(len(categories))  # positions for the bars
     sales_before_vals = [sales_before[cat] for cat in categories]
     sales_after_vals = [sales_after[cat] for cat in categories]
-    plt.bar(x, sales_before_vals, width=0.4, label='Before Promotion', align='center')
-    plt.bar([p + 0.4 for p in x], sales_after_vals, width=0.4, label='After Promotion', align='edge')
+    bar_width = 0.35  # width of the bars
+    # Adjust positions for "Before Promotion" bars
+    plt.bar([p - bar_width/2 for p in x], sales_before_vals, width=bar_width, label='Before Promotion')
+    # Adjust positions for "After Promotion" bars
+    plt.bar([p + bar_width/2 for p in x], sales_after_vals, width=bar_width, label='After Promotion')
+    # Setting up labels and ticks
     plt.xticks(x, labels)
     plt.title('Sales Volume by Category Before and After Promotion')
     plt.ylabel('Total Sales')
     plt.legend()
     plt.show()  # Show sales comparison plot
+
 
 # Step 6: Visualize Reorder Rates Before and After Promotion
 reorder_before = [agent.reorders for agent in agents]
