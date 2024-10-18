@@ -8,6 +8,7 @@ class RetailCustomerAgent(BaseAgent):
         self.preferences = preferences  # Dictionary of product preferences
         self.budget = budget  # Available spending budget
         self.cart = {}  # Items the agent intends to purchase
+        self.reorders = 0
 
 def generate_budget():
     """Generate a random budget for the agent."""
