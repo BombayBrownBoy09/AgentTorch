@@ -21,6 +21,13 @@ def get_by_path(root, items):
         return property_obj
 
 
+def get_var(state, var):
+    """
+    Retrieves a value from the current state of the model.
+    """
+    return get_by_path(state, re.split("/", var))
+
+
 def set_by_path(root, items, value):
     r"""Set a value in a nested object in root by item sequence"""
     val_obj = get_by_path(root, items[:-1])

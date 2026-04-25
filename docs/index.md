@@ -10,10 +10,6 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/AgentTorch/AgentTorch/blob/master/license.md" target="_blank">
-    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Released under the MIT license." />
-  </a>
-
   <a href="https://agenttorch.github.io/AgentTorch/" target="_blank">
     <img src="https://img.shields.io/badge/Quick%20Introduction-green" alt="Documentation" />
   </a>
@@ -80,7 +76,7 @@ Torch API.
 A Jupyter Notebook containing the below examples can be found
 [here](docs/tutorials/using-models/walkthrough.ipynb).
 
-### Executing a Simulation with Gradient Based Learning
+### Executing a Simulation
 
 ```py
 # re-use existing models and population data easily
@@ -108,10 +104,30 @@ simulation.execute()
 A detailed explanation of the architecture of the Agent Torch framework can be
 found [here](architecture.md).
 
+### Building Simulations with the Configuration API
+
+Learn how to create and customize agent-based simulations using AgentTorch's powerful Configuration API. This tutorial walks you through:
+- Creating agents with custom properties
+- Defining environment variables and networks
+- Building simulation substeps with policies and transitions
+- Best practices for organizing your simulation
+
+[Get started with the Config API tutorial →](tutorials/config_api/index.md)
+
+### Optimizing Performance with Vectorized Operations
+
+Learn how to leverage AgentTorch's vectorized operations for high-performance simulations:
+- Understanding vectorized vs standard operations
+- Converting standard functions to vectorized implementations
+- Using batched processing for large populations
+- Performance optimization techniques
+
+[Learn about vectorized operations →](tutorials/vectorized_operations/index.md)
+
 ### Creating a Model
 
 A tutorial on how to create a simple predator-prey model can be found in the
-[`tutorials/`]tutorials/) folder.
+[`tutorials/`](tutorials/) folder.
 
 ### Prompting Collective Behavior with LLM Archetypes
 

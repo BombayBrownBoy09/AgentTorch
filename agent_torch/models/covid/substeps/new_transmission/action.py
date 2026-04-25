@@ -8,12 +8,15 @@ from agent_torch.core.substep import SubstepAction
 from agent_torch.core.llm.backend import LangchainLLM
 from agent_torch.core.distributions import StraightThroughBernoulli
 
+from agent_torch.core.decorators import with_behavior
+
 from ...calibration.utils.data import get_data, get_labels
 from ...calibration.utils.feature import Feature
 from ...calibration.utils.llm import AgeGroup, SYSTEM_PROMPT, construct_user_prompt
 from ...calibration.utils.misc import week_num_to_epiweek, name_to_neighborhood
 
 
+@with_behavior
 class MakeIsolationDecision(SubstepAction):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -46,7 +49,19 @@ class MakeIsolationDecision(SubstepAction):
         return one_hot_tensor.to(self.device)
 
     def forward(self, state, observation):
-        # if in debug mode, return random values for isolation
-        will_isolate = torch.rand(self.num_agents, 1).to(self.device)
+        # if in heuristic mode, return random values for isolation decision
+        if self.mode == "heuristic":
+            will_isolate = torch.rand(self.num_agents, 1).to(self.device)
+        else:
+            if self.behavior is None:
+                will_isolate = torch.rand(self.num_agents, 1).to(self.device)
+            else:
+                will_isolate = self.behavior(observation)
 
-        return {self.output_variables[0]: will_isolate}
+        # Safe handling of output_variables to prevent None access
+        if hasattr(self, 'output_variables') and self.output_variables:
+            output_key = self.output_variables[0]
+        else:
+            output_key = "isolation_decision"
+            
+        return {output_key: will_isolate}

@@ -1,7 +1,7 @@
 import importlib
 import sys
 from tqdm import trange
-
+import dask.dataframe as dd
 from agent_torch.core.dataloader import DataLoader
 from agent_torch.core.runner import Runner
 
@@ -11,9 +11,11 @@ class BaseExecutor:
         self.model = model
 
     def _get_runner(self, config):
-        module_name = f"{self.model.__name__}.simulator"
+        module_name = self.model.__name__
         module = importlib.import_module(module_name)
-        registry = module.get_registry()
+
+        registry = module.registry
+        print("Registry: ", registry)
         runner = Runner(config, registry)
         return runner
 
@@ -27,7 +29,9 @@ class Executor(BaseExecutor):
             self.data_loader = DataLoader(model, self.pop_loader)
         else:
             self.data_loader = data_loader
+
         self.config = self.data_loader.get_config()
+        self.runner = self._get_runner(self.config)
 
     def init(self):
         self.config = self.data_loader.get_config()
@@ -53,7 +57,8 @@ class Executor(BaseExecutor):
             self.simulation_values = self.runner.get_simulation_values(key)
 
     def get_simulation_values(self, key, key_type="environment"):
-        self.simulation_values = self.runner.state_trajectory[-1][-1][key_type][
-            key
-        ]  # List containing values for each step
+        if isinstance(self.runner.state_trajectory, dd.DataFrame):
+            self.runner.state_trajectory = self.runner.state_trajectory.compute()
+
+        self.simulation_values = self.runner.state_trajectory[-1][-1][key_type][key]
         return self.simulation_values

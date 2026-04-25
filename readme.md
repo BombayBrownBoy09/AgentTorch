@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://lpm.media.mit.edu/" target="_blank">
+  <a href="https://media.mit.edu/projects/ai-lpm" target="_blank">
     Large Population Models
   </a>
 </h1>
@@ -10,9 +10,6 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/AgentTorch/AgentTorch/blob/master/license.md" target="_blank">
-    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Released under the MIT license." />
-  </a>
 
   <a href="https://agenttorch.github.io/AgentTorch/" target="_blank">
     <img src="https://img.shields.io/badge/Quick%20Introduction-green" alt="Documentation" />
@@ -27,15 +24,15 @@
 
 ## Overview
 
-Many grand challenges like climate change and pandemics emerge from complex interactions of millions of individual decisions. While LLMs and AI agents excel at individual behavior, they can't model these intricate societal dynamics. Enter Large Population Models LPMs: a new AI paradigm simulating millions of interacting agents simultaneously, capturing collective behaviors at societal scale. It's like scaling up AI agents exponentially to understand the ripple effects of countless decisions.
+Many grand challenges like climate change and pandemics emerge from complex interactions of millions of individual decisions. While LLMs and agent simulations excel at individual behavior, they can't model these intricate societal dynamics. Enter Large Population Models (LPMs): a new paradigm to simulate millions of interacting entities, capturing behaviors at collective scale. It like scaling up LLMs exponentially to understand the ripple effects of countless decisions. While LLMs build "digital humans", LPMs build "digital societies".
 
-AgentTorch, our open-source platform, makes building and running these massive simulations accessible. It's optimized for GPUs, allowing efficient simulation of entire cities or countries. Think PyTorch, but for large-scale agent-based simulations. AgentTorch LPMs have four design principles:
+AgentTorch, our open-source platform, makes building and running massive LPMs accessible. It's optimized for GPUs, allowing efficient simulation of large-scale systems. Think PyTorch, but for large-scale agent-based simulations. AgentTorch LPMs have four design principles:
 
-- **Scalability**: AgentTorch models can simulate country-size populations in
-  seconds on commodity hardware.
+- **Scalability**: AgentTorch models can simulate large-scale populations in
+  seconds across commodity hardware to computing clusters.
 - **Differentiability**: AgentTorch models can differentiate through simulations
   with stochastic dynamics and conditional interventions, enabling
-  gradient-based learning.
+  gradient-based optimization.
 - **Composition**: AgentTorch models can compose with deep neural networks (eg:
   LLMs), mechanistic simulators (eg: mitsuba) or other LPMs. This helps describe
   agent behavior using LLMs, calibrate simulation parameters and specify
@@ -44,23 +41,12 @@ AgentTorch, our open-source platform, makes building and running these massive s
   geospatial worlds, cells in anatomical worlds, autonomous avatars in digital
   worlds.
 
-LPMs are already making real-world impact. They're being used to help immunize millions of people by optimizing vaccine distribution strategies, and to track billions of dollars in global supply chains, improving efficiency and reducing waste. Our long-term goal is to "re-invent the census": built entirely in simulation, captured passively and used to protect country-scale populations. Our research is early but actively making an impact - winning awards at AI conferences and being deployed across the world. Learn more about our vision [here](https://lpm.media.mit.edu/vision.pdf).
-
-AgentTorch is building the future of decision engines - inside the body, around us and beyond!
+Our research is making an impact - winning awards at AI conferences and being used in real-world applications.
+Learn more [here](https://media.mit.edu/projects/ai-lpm).
 
 https://github.com/AgentTorch/AgentTorch/assets/13482350/4c3f9fa9-8bce-4ddb-907c-3ee4d62e7148
 
 ## Installation
-
-The easiest way to install AgentTorch (v0.4.0) is from pypi:
-```
-> pip install agent-torch
-```
-
-> AgentTorch is meant to be used in a Python 3.9 environment. If you have not
-> installed Python 3.9, please do so first from
-> [python.org/downloads](https://www.python.org/downloads/).
-
 Install the most recent version from source using `pip`:
 
 ```sh
@@ -71,35 +57,52 @@ Install the most recent version from source using `pip`:
 > For more information regarding this, as well as the hardware the project has
 > been run on, please see [`docs/install.md`](docs/install.md).
 
+Alternately, the easiest way to install AgentTorch (v0.6.0) is from pypi:
+```
+> pip install agent-torch
+```
+
+> AgentTorch is meant to be used in a Python >=3.9 environment. If you have not
+> installed Python 3.9, please do so first from
+> [python.org/downloads](https://www.python.org/downloads/).
+
 ## Getting Started
 
 The following section depicts the usage of existing models and population data
 to run simulations on your machine. It also acts as a showcase of the Agent
-Torch API.
+Torch API. See the getting started tutorial at [building a random walk model](https://agenttorch.github.io/AgentTorch/tutorials/config_api/)
 
-A Jupyter Notebook containing the below examples can be found
-[here](docs/tutorials/using-models/walkthrough.ipynb).
-
-### Executing a Simulation with Gradient Based Learning
+### Executing a Simulation
 
 ```py
 # re-use existing models and population data easily
-from agent_torch.models import covid
+from agent_torch.examples.models import movement
 from agent_torch.populations import astoria
+from agent_torch.core.environment import envs
 
-# use the executor to plug-n-play
-from agent_torch.core.executor import Executor
-from agent_torch.core.dataloader import LoadPopulation
+runner = envs.create(model=movement, population=astoria) # create simulation and init runner
 
-# agent_"torch" works seamlessly with the pytorch API
-from torch.optim import SGD
+sim_steps = runner.config["simulation_metadata"]["num_steps_per_episode"]
+num_episodes = runner.config["simulation_metadata"]["num_episodes"]
 
-loader = LoadPopulation(astoria)
-simulation = Executor(model=covid, pop_loader=loader)
+for epi in range(num_episodes):
+  runner.step(sim_steps)
 
-simulation.init()
-simulation.execute()
+  runner.reset() # re-initializes the sim parameters for new episode
+
 ```
+
+## License
+Copyright (c) 2023-2025 Ayush Chopra
+
+This project is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0). This means:
+- You can freely use, modify, and distribute this software
+- If you use this software to provide services over a network, you must make your source code available to users
+- Any modifications or derivative works must also be licensed under AGPL-3.0
+- You must give appropriate credit and indicate any changes made
+- For full terms, see [LICENSE.md](LICENSE.md) file in this repository
+
+For inquiries about using this software in a proprietary product, please reach out to request a license wavier.
 
 ## Guides and Tutorials
 
@@ -116,21 +119,8 @@ A tutorial on how to create a simple predator-prey model can be found in the
 ### Contributing to Agent Torch
 
 Thank you for your interest in contributing! You can contribute by reporting and
-fixing bugs in the framework or models, working on new features for the
-framework, creating new models, or by writing documentation for the project.
+fixing bugs in the framework or models, working on new features, creating new models, or by writing documentation for the project.
 
 Take a look at the [contributing guide](docs/contributing.md) for instructions
 on how to setup your environment, make changes to the codebase, and contribute
 them back to the project.
-
-## License
-
-Copyright (c) 2023 Ayush Chopra
-
-This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License. This means you are free to share and adapt the material for non-commercial purposes, as long as you give appropriate credit and indicate if changes were made. For more details, see the [LICENSE.md](license.md) file in this repository.
-
-## Impact
-
-> **AgentTorch models are being deployed across the globe.**
-
-![Impact](docs/media/impact.png)
