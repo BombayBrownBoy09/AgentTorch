@@ -116,6 +116,15 @@ found [here](docs/architecture.md).
 A tutorial on how to create a simple predator-prey model can be found in the
 [`tutorials/`](docs/tutorials/) folder.
 
+### Use Cases
+
+The following repositories showcase AgentTorch applied to real-world domains:
+
+| Repo | Domain |
+|---|---|
+| [sim2real](https://github.com/AgentTorch/sim2real) | Beckn open commerce protocol |
+| [retail](retail/) | Retail market — consumer purchasing & inventory management |
+
 ### Contributing to Agent Torch
 
 Thank you for your interest in contributing! You can contribute by reporting and
